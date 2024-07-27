@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hold-up Kondansatör Hesaplayıcı</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        #calculator {
+            background-color: #4169e1;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px 2px #888;
+            text-align: left;
+            display: inline-block;
+            position: relative; /* Container için göreceli pozisyon ekleyin */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            color: #f99245;
+            font-weight: bold;
+            
+        }
+
+        input {
+            padding: 5px;
+            width: 100%;
+            margin: 5px 0;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px 1px #f99245;
+        }
+
+        button {
+            background-color: #f99245;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 10px auto; /* Butonu ortalamak için margin eklenmiştir */
+            display: block; /* Butonun tek başına bir satırda olmasını sağlar */
+            cursor: pointer;
+            box-shadow: 0px 0px 10px 1px #f99245;
+        }
+
+        button:hover {
+            background-color: #FFC902;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #f99245;
+            text-align: center;
+        }
+
+        .formula {
+            font-family: "Courier New", monospace;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        #designedBy {
+            font-family: cursive;
+            font-size: 14px;
+            color: #f99245;
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        #art {
+            text-align: center;
+            font-family: "Courier New", monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hold-up Kondansatör Hesaplayıcı</h1>
+
+    <div id="calculator">
+        <p class="formula">C_hold-up (uF) = (2 * P_out * t * 1000) / (Eff * (V_cap^2 - UVLO^2))</p>
+
+        <form id="calculator-form">
+            <label for="outputPower">DC/DC Dönüştürücü Çıkış Gücü (W):</label>
+            <input type="number" id="outputPower" step="0.01" required><br>
+
+            <label for="efficiency">DC/DC Dönüştürücü Verimliliği (%):</label>
+            <input type="number" id="efficiency" step="0.01" required><br>
+
+            <label for="holdupTime">Hold-up Süresi Gereksinimi (ms):</label>
+            <input type="number" id="holdupTime" step="0.01" required><br>
+
+            <label for="capacitorVoltage">Kondansatör Voltajı (V_cap):</label>
+            <input type="number" id="capacitorVoltage" step="0.01" required><br>
+
+            <label for="uvloVoltage">UVLO (Under Voltage Lock Out) Gerilimi (V):</label>
+            <input type="number" id="uvloVoltage" step="0.01" required><br>
+
+            <button type="button" onclick="calculateCapacitor()">Hesapla</button>
+        </form>
+
+        <p id="result"></p>
+
+        <div id="art">
+          <pre>
+\____________________/
+  __/__|_________|__\__
+/⭕⭕________⭕⭕\
+|__/___GTR-R34___\__|
+\ ©🔥._|_|_|_|_|_. 🔥©/
+          </pre>
+        </div>
+
+        <div id="designedBy">Designed by Okan</div>
+    </div>
+
+    <script>
+        function calculateCapacitor() {
+            const outputPower = parseFloat(document.getElementById('outputPower').value);
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+            const holdupTime = parseFloat(document.getElementById('holdupTime').value);
+            const capacitorVoltage = parseFloat(document.getElementById('capacitorVoltage').value);
+            const uvloVoltage = parseFloat(document.getElementById('uvloVoltage').value);
+
+            if (!isNaN(outputPower) && !isNaN(efficiency) && !isNaN(holdupTime) && !isNaN(capacitorVoltage) && !isNaN(uvloVoltage)) {
+                const capacitorValue_uF = Math.round((2 * outputPower * holdupTime) / (efficiency * (capacitorVoltage**2 - uvloVoltage**2)) * 1e5);
+
+                document.getElementById('result').textContent = `Kondansatör Değeri: ${capacitorValue_uF} uF`;
+            } else {
+                document.getElementById('result').textContent = "Lütfen geçerli sayılar girin!";
+            }
+        }
+    </script>
+</body>
+</html>
